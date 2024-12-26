@@ -42,6 +42,11 @@ public class Dishservice {
 
     }
 
+    public int getDishCalorie(String dishName) {
+
+        return dishrepo.getCaloriefromRepo(dishName);
+    }
+
     public Integer getCalorieCount(String name, int quantity, String unit) {
 
         int calorie = 1;
@@ -92,6 +97,21 @@ public class Dishservice {
     public void storeDishCalorie(String dishname, int calorie) {
 
         dishrepo.storeCalorie(dishname, calorie);
+    }
+
+    public void storeBasedonUser(String dishname, String username) {
+
+        dishrepo.storedishUser(dishname, username);
+    }
+
+    public void deleteDish(String dishname, String username) {
+
+        dishrepo.deleteDishfromRepo(dishname, username);
+    }
+
+    public boolean checkNameExists(String dishname) {
+
+        return dishrepo.checkNameExistinRepo(dishname);
     }
 
 

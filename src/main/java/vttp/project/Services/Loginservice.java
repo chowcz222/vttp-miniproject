@@ -1,6 +1,7 @@
 package vttp.project.Services;
 
 import java.io.StringReader;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,8 +124,12 @@ public class Loginservice {
         int age = result.getInt("age");
         int height = result.getInt("height");
         int weight = result.getInt("weight");
+        edit editTemp = new edit();
+        editTemp.setAge(age);
+        editTemp.setHeight(height);
+        editTemp.setWeight(weight);
         
-        return new edit(age, height, weight);
+        return editTemp;
     }
 
     public void saveProfile(String username, int age, int height, int weight) {
@@ -173,6 +178,11 @@ public class Loginservice {
         String updatedDetails = updatedResult.toString();
 
         loginrepo.storeUserinRepo(username, updatedDetails);
+    }
+
+    public List<String> getUserdishesfromRepo(String username) {
+
+        return loginrepo.getUserdishes(username);
     }
 
     

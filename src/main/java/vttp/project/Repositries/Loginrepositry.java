@@ -1,6 +1,7 @@
 package vttp.project.Repositries;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +54,10 @@ public class Loginrepositry {
     public void storeLogininRepo(String username, String password) {
 
         redisTemplate.opsForHash().put("user", username, password);
+    }
+
+    public List<String> getUserdishes(String username) {
+
+        return (List<String>)redisTemplate.opsForList().range(username, 0 , -1);
     }
 }

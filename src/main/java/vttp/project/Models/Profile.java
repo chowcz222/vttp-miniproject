@@ -18,6 +18,8 @@ public class Profile {
     String gender;
 
     @NotNull(message="Age cannot be null")
+    @Min(value=10, message="Age cannot be less than 10yrs")
+    @Max(value=120, message="Age cannot be more than 120yrs")
     Integer age;
 
     @NotNull(message="Height cannot be null")

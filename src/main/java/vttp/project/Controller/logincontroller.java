@@ -115,19 +115,69 @@ public class logincontroller {
     @GetMapping("/editprofile")
     public String showEditProfilePage(Model model, HttpSession session) {
 
+        model.addAttribute("edit", new edit());
+
         edit profileDetails = loginsvc.getHeightWeightAge((String)session.getAttribute("username"));
         model.addAttribute("name", (String)session.getAttribute("username"));
         model.addAttribute("age", profileDetails.getAge());
         model.addAttribute("height", profileDetails.getHeight());
         model.addAttribute("weight", profileDetails.getWeight());
+        List<String> dishList = loginsvc.getUserdishesfromRepo((String)session.getAttribute("username"));
+        model.addAttribute("dishList", dishList);
         return "profile";
     }
 
     @PostMapping("/storeprofile")
-    public String saveNewProfile(@RequestParam("age") int age, @RequestParam("height") int height, @RequestParam("weight") int weight, HttpSession session ) {
+    public String saveNewProfile(@ModelAttribute("profile") edit editTemp, Model model, HttpSession session ) {
+
+        if(editTemp.getAge() < 10 || editTemp.getAge()> 120) {
+            model.addAttribute("errorMessage1", "Age must be between 10yrs & 120yrs");
+
+            model.addAttribute("edit", new edit());
+
+            edit profileDetails = loginsvc.getHeightWeightAge((String)session.getAttribute("username"));
+            model.addAttribute("name", (String)session.getAttribute("username"));
+            model.addAttribute("age", profileDetails.getAge());
+            model.addAttribute("height", profileDetails.getHeight());
+            model.addAttribute("weight", profileDetails.getWeight());
+            List<String> dishList = loginsvc.getUserdishesfromRepo((String)session.getAttribute("username"));
+            model.addAttribute("dishList", dishList);
+            return "profile";
+        }
+
+        
+        if(editTemp.getHeight() < 60 || editTemp.getHeight()> 270) {
+            model.addAttribute("errorMessage2", "Height must be between 60cm & 270cm");
+
+            model.addAttribute("edit", new edit());
+
+            edit profileDetails = loginsvc.getHeightWeightAge((String)session.getAttribute("username"));
+            model.addAttribute("name", (String)session.getAttribute("username"));
+            model.addAttribute("age", profileDetails.getAge());
+            model.addAttribute("height", profileDetails.getHeight());
+            model.addAttribute("weight", profileDetails.getWeight());
+            List<String> dishList = loginsvc.getUserdishesfromRepo((String)session.getAttribute("username"));
+            model.addAttribute("dishList", dishList);
+            return "profile";
+        }
+
+        if(editTemp.getWeight() < 30 || editTemp.getWeight()> 500) {
+            model.addAttribute("errorMessage3", "Weight must be between 30kg & 500kg");
+
+            model.addAttribute("edit", new edit());
+
+            edit profileDetails = loginsvc.getHeightWeightAge((String)session.getAttribute("username"));
+            model.addAttribute("name", (String)session.getAttribute("username"));
+            model.addAttribute("age", profileDetails.getAge());
+            model.addAttribute("height", profileDetails.getHeight());
+            model.addAttribute("weight", profileDetails.getWeight());
+            List<String> dishList = loginsvc.getUserdishesfromRepo((String)session.getAttribute("username"));
+            model.addAttribute("dishList", dishList);
+            return "profile";
+        }
 
 
-        loginsvc.saveProfile((String)session.getAttribute("username"), age, height, weight);
+        loginsvc.saveProfile((String)session.getAttribute("username"), editTemp.getAge(), editTemp.getHeight(), editTemp.getWeight());
 
         return"saved";
     }

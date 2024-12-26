@@ -1,5 +1,7 @@
 package vttp.project.Repositries;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -25,6 +27,11 @@ public class Dishrepositry {
         return dishIngredients;
     }
 
+    public int getCaloriefromRepo(String dishName) {
+
+        return (int)redisTemplate.opsForHash().get("calorie",dishName);
+    }
+
     
 
     public void storeInstruction(String dishname, String instruction) {
@@ -41,4 +48,23 @@ public class Dishrepositry {
 
         redisTemplate.opsForHash().put("calorie", dishname, calorie);
     }
+
+    public void storedishUser(String dishname, String username) {
+
+        redisTemplate.opsForList().leftPush(username, dishname);
+
+    }
+
+    public void deleteDishfromRepo(String dishname, String username) {
+
+        redisTemplate.opsForList().remove(username, 0, dishname);
+        redisTemplate.opsForHash().delete("instruction", dishname);
+        redisTemplate.opsForHash().delete("ingredients", dishname);
+        redisTemplate.opsForHash().delete("calorie", dishname);
+    }
+
+    public boolean checkNameExistinRepo(String dishName) {
+        return redisTemplate.opsForHash().hasKey("instruction", dishName);
+    }
+
 }
