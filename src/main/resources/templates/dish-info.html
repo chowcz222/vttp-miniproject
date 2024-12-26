@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dish Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin-top: 50px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #6c63ff;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        table th {
+            background-color: #6c63ff;
+            color: #fff;
+        }
+        table td {
+            background-color: #f8f9fa;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Arial', sans-serif;  
+            font-size: 1rem;  
+        }
+        .back-btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .btn-back {
+            background-color: #6c63ff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+        }
+        .btn-back:hover {
+            background-color: #5751d9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1><code data-th-text="${name}"></code></h1>
+        <h2>Ingredients</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Unit</th>
+                    <th>Calorie</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-th-each="li: ${dish.contents}" data-th-object="${li}">
+                    <td><span data-th-text="*{name}"></span></td>
+                    <td><span data-th-text="*{quantity}"></span></td>
+                    <td><span data-th-text="*{unit}"></span></td>
+                    <td><span data-th-text="*{calorie}"></span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Instructions</h2>
+        <pre data-th-utext="${instruction}"></pre>
+
+        <div class="back-btn-container">
+            <form method="GET" action="/loginmainpage">
+                <button class="btn-back">Back</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CalorieConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('homepage.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin-top: 100px;
+        }
+        .taskbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+        .taskbar button {
+            color: #fff;
+            background-color: #6c63ff;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+        .taskbar button:hover {
+            background-color: #5751d9;
+        }
+        .content-box {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .content-box h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .content-box .big-text {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #6c63ff;
+        }
+        .table {
+            margin-top: 30px;
+            width: 100%;
+        }
+        .table th, .table td {
+            text-align: center;
+        }
+        .table th {
+            background-color: #6c63ff;
+            color: #fff;
+        }
+        .table td {
+            background-color: #f8f9fa;
+        }
+        .form-group select {
+            padding: 10px;
+            font-size: 1rem;
+        }
+        .btn-submit, .btn-delete {
+            background-color: #ff758c;
+            color: #fff;
+            border-radius: 5px;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+        .btn-submit:hover, .btn-delete:hover {
+            background-color: #e14b64;
+        }
+        .back-btn-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="taskbar">
+        <form method="GET" action="/editprofile" style="display:inline;">
+            <button>Edit Profile</button>
+        </form>
+        <form method="POST" action="/logout" style="display:inline;">
+            <button>Logout</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <div class="content-box">
+            <h1>Ingredients List</h1>
+            <div th:if="${#lists.isEmpty(dishinfo.contents)}">
+                <h3>No Ingredients added yet</h3>
+            </div>
+
+            <div data-th-unless="${#lists.isEmpty(dishinfo.contents)}">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                            <th>Calorie</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-th-each="li: ${dishinfo.contents}" data-th-object="${li}">
+                            <td><span data-th-text="*{name}"></span></td>
+                            <td><span data-th-text="*{quantity}"></span></td>
+                            <td><span data-th-text="*{unit}"></span></td>
+                            <td><span data-th-text="*{calorie}"></span></td>
+                            <td>
+                                <form method="POST" action="/deleteIngredient">
+                                    <input type="hidden" name="ingredientName" data-th-value="*{name}">
+                                    <input type="hidden" name="ingredientQuantity" data-th-value="*{quantity}">
+                                    <input type="hidden" name="ingredientUnit" data-th-value="*{unit}">
+                                    <button type="submit" class="btn-delete">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div th:if="${dishcalorie}" class="total-calories">
+                <p class="big-text">Total Calories: <code data-th-text="${dishcalorie}"></code></p>
+            </div>
+        </div>
+        <div class="content-box">
+            <h1>Add Ingredient</h1>
+            <form method="POST" data-th-action="@{/addIngredients}">
+                <div class="form-group">
+                    <label for="name">Item:</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" name="quantity" class="form-control" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="unit">Unit:</label>
+                    <select name="unit" class="form-control" required>
+                        <option value="kg">Kilograms (kg)</option>
+                        <option value="g">Grams (g)</option>
+                        <option value="lbs">Pounds (lbs)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-submit">Add Ingredient</button>
+            </form>
+        </div>
+
+        <div class="content-box">
+            <h1>Name of Dish</h1>
+            <form method="POST" action="/postdish">
+                <div class="form-group">
+                    <label for="dishname">Dish Name:</label>
+                    <input type="text" name="dishname" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="instruction">Instructions:</label>
+                    <textarea name="instruction" class="form-control" rows="4" placeholder="Type your steps here..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Save Dish</button>
+            </form>
+
+                <div class="back-btn-container">
+                    <form method="GET" action="/loginmainpage">
+                        <button class="btn-submit">Back</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

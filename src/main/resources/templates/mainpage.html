@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CalorieConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('homepage.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin-top: 100px;
+        }
+        .taskbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+        .taskbar button {
+            color: #fff;
+            background-color: #6c63ff;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+        .taskbar button:hover {
+            background-color: #5751d9;
+        }
+        .content-box {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+        }
+        .content-box h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .content-box .big-text {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #6c63ff;
+        }
+        .table {
+            margin-top: 30px;
+            width: 100%;
+        }
+        .table th, .table td {
+            text-align: center;
+        }
+        .table th {
+            background-color: #6c63ff;
+            color: #fff;
+        }
+        .table td {
+            background-color: #f8f9fa;
+        }
+        .form-group select {
+            padding: 10px;
+            font-size: 1rem;
+        }
+        .btn-share {
+            background-color: #ff758c;
+            color: #fff;
+            border-radius: 5px;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+        .btn-share:hover {
+            background-color: #e14b64;
+        }
+        .center-button {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="taskbar">
+        <form method="GET" action="/editprofile" style="display:inline;">
+            <button>Edit Profile</button>
+        </form>
+        <form method="POST" action="/logout" style="display:inline;">
+            <button>Logout</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <div class="content-box">
+            <h1>Total Calorie Intake</h1>
+            <p class="big-text">Daily Intake: <code data-th-text="${calorieIntake}"></code></p>
+            <p class="big-text">Calories per Meal: <code data-th-text="${mealCalorie}"></code></p>
+        </div>
+
+        <div class="content-box">
+            <h1>Select Number of Meals</h1>
+            <form method="GET" action="/loginmainpage">
+                <div class="form-group">
+                    <label for="meals">Meals per Day:</label>
+                    <select name="meals" id="meals" class="form-control" onchange="this.form.submit()">
+                        <option value="3" th:selected="${meals == 3}">3 Meals</option>
+                        <option value="2" th:selected="${meals == 2}">2 Meals</option>
+                        <option value="1" th:selected="${meals == 1}">1 Meal</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+
+        <div class="content-box center-button">
+            <form method="GET" action="/dishcreationpage">
+                <button class="btn-share">Share Your Dish</button>
+            </form>
+        </div>
+
+        <div class="content-box">
+            <h1>Dishes List</h1>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Dish Name</th>
+                        <th>Calories</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="entry : ${dishList}">
+                        <td>
+                            <a th:href="@{/dishes/{name}(name=${entry.key})}" th:text="${entry.key}">Dish Name</a>
+                        </td>
+                        <td th:text="${entry.value}">Calories</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
