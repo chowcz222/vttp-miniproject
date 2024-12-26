@@ -46,6 +46,10 @@ public class Dishservice {
 
         int calorie = 1;
 
+        if(unit.equals("tbsp") || unit.equals("pieces")){
+            unit = "";
+        }
+
         String url = CALORIE_URL + String.valueOf(quantity) + unit + " " + name;
 
         RequestEntity<Void> req = RequestEntity
