@@ -177,7 +177,7 @@
 
                 <button type="submit" class="btn-submit">Add Ingredient</button>
             </form>
-            <div th:if="${errorMessage}" class="error">
+            <div th:if="${errorMessage != null && !#strings.isEmpty(errorMessage)}" class="error">
                 <p th:text="${errorMessage}"></p>
             </div>
         </div>
