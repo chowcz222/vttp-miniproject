@@ -31,7 +31,7 @@ public class DishesControler {
 
         String instruction = dishsvc.getDishinstruction(name);
         instruction = instruction.replace("\\r\\n", "\n").replace("\\n", "\n");
-        System.out.println("Processed Dish Instructions: " + instruction);
+        
 
         dish ingredientList = dishsvc.getDishingredients(name);
 

@@ -88,6 +88,15 @@
             right: 20px;
             text-align: right;
         }
+        .error {
+            color: #fff;
+            background-color: #d9534f;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -168,6 +177,9 @@
 
                 <button type="submit" class="btn-submit">Add Ingredient</button>
             </form>
+            <div th:if="${errorMessage}" class="error">
+                <p th:text="${errorMessage}"></p>
+            </div>
         </div>
 
         <div class="content-box">

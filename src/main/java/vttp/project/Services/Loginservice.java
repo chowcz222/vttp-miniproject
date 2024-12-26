@@ -104,9 +104,6 @@ public class Loginservice {
 
         String userDetailsString = userDetails.toString();
 
-
-        System.out.println(userDetailsString);
-
         loginrepo.storeUserinRepo(username, userDetailsString);
 
     }
