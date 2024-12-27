@@ -226,25 +226,32 @@ public class DishesControler {
         dish dishInfo = (dish) session.getAttribute("newDish2");
 
         if (dishInfo != null) {
-
             int removedCalorie = 0;
+            boolean itemRemoved = false;
+        
             Iterator<Ingredients> iterator = dishInfo.getContents().iterator();
             while (iterator.hasNext()) {
                 Ingredients ingredient = iterator.next();
-                if (ingredient.getName().equals(ingredientName) &&
+                if (!itemRemoved && ingredient.getName().equals(ingredientName) &&
                     ingredient.getQuantity() == ingredientQuantity &&
                     ingredient.getUnit().equals(ingredientUnit)) {
+                    
                     iterator.remove();
                     removedCalorie += ingredient.getCalorie();
+                    itemRemoved = true;
                 }
             }
-            int totalcalorie = (int)session.getAttribute("dishcalorie2");
-            int newCalorie = totalcalorie - removedCalorie;
-            
-            session.setAttribute("newDish2", dishInfo);
-            session.setAttribute("dishcalorie2", newCalorie);
-            model.addAttribute("dishcalorie", newCalorie);
+        
+            if (itemRemoved) {
+                int totalCalorie = (int) session.getAttribute("dishcalorie2");
+                int newCalorie = totalCalorie - removedCalorie;
+        
+                session.setAttribute("newDish2", dishInfo);
+                session.setAttribute("dishcalorie2", newCalorie);
+                model.addAttribute("dishcalorie", newCalorie);
+            }
         }
+        
 
         model.addAttribute("dishname", (String)session.getAttribute("dishName2"));
         model.addAttribute("dishinfo", dishInfo);
