@@ -191,7 +191,7 @@
                 <div class="form-group">
                     <label>Your previous age is:</label>
                     <code class="code-value" data-th-text="${age}"></code>
-                    <input type="number" data-th-field="*{age}" required placeholder="Enter current age"> yrs
+                    <input type="number" data-th-field="*{age}" th:value="${tempage}" required placeholder="Enter current age"> yrs
                     <div th:if="${errorMessage1}" class="error">
                         <p th:text="${errorMessage1}"></p>
                     </div>
@@ -199,7 +199,7 @@
                 <div class="form-group">
                     <label>Your previous height is:</label>
                     <code class="code-value" data-th-text="${height}"></code>
-                    <input type="number" data-th-field="*{height}" required placeholder="Enter current height"> cm
+                    <input type="number" data-th-field="*{height}" th:value="${tempheight}" required placeholder="Enter current height"> cm
                     <div th:if="${errorMessage2}" class="error">
                         <p th:text="${errorMessage2}"></p>
                     </div>
@@ -207,7 +207,7 @@
                 <div class="form-group">
                     <label>Your previous weight is:</label>
                     <code class="code-value" data-th-text="${weight}"></code>
-                    <input type="number" data-th-field="*{weight}" required placeholder="Enter current weight"> kg
+                    <input type="number" data-th-field="*{weight}" th:value="${tempweight}"required placeholder="Enter current weight"> kg
                     <div th:if="${errorMessage3}" class="error">
                         <p th:text="${errorMessage3}"></p>
                     </div>

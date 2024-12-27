@@ -159,24 +159,31 @@ public class DishesControler {
         dish dishInfo = (dish) session.getAttribute("newDish");
 
         if (dishInfo != null) {
-
             int removedCalorie = 0;
+            boolean itemRemoved = false;
+        
             Iterator<Ingredients> iterator = dishInfo.getContents().iterator();
             while (iterator.hasNext()) {
-            Ingredients ingredient = iterator.next();
-            if (ingredient.getName().equals(ingredientName) &&
-                ingredient.getQuantity() == ingredientQuantity &&
-                ingredient.getUnit().equals(ingredientUnit)) {
-                iterator.remove();
-                removedCalorie += ingredient.getCalorie();
+                Ingredients ingredient = iterator.next();
+                if (!itemRemoved && ingredient.getName().equals(ingredientName) &&
+                    ingredient.getQuantity() == ingredientQuantity &&
+                    ingredient.getUnit().equals(ingredientUnit)) {
+                    
+                    iterator.remove();
+                    removedCalorie += ingredient.getCalorie();
+                    itemRemoved = true;
+                }
+            }
+        
+            if (itemRemoved) {
+                int totalCalorie = (int) session.getAttribute("dishcalorie");
+                int newCalorie = totalCalorie - removedCalorie;
+        
+                session.setAttribute("newDish", dishInfo);
+                session.setAttribute("dishcalorie", newCalorie);
             }
         }
-            int totalcalorie = (int)session.getAttribute("dishcalorie");
-            int newCalorie = totalcalorie - removedCalorie;
-            
-            session.setAttribute("newDish", dishInfo);
-            session.setAttribute("dishcalorie", newCalorie);
-        }
+        
 
         return "redirect:/dishcreationpage";
     }
