@@ -17,6 +17,7 @@
             background: url('homepage.jpg') no-repeat center center fixed;
             background-size: cover;
         }
+    
         .container {
             display: flex;
             justify-content: center;
@@ -24,6 +25,7 @@
             flex-direction: row;
             gap: 50px;
         }
+    
         .form-card, .info-card {
             width: 100%;
             max-width: 400px;
@@ -33,15 +35,18 @@
             background: rgba(255, 255, 255, 0.9);
             color: #333333;
         }
+    
         .form-card h1 {
             font-size: 1.8rem;
             font-weight: bold;
             margin-bottom: 10px;
         }
+    
         .form-card p {
             font-size: 1rem;
             margin-bottom: 20px;
         }
+    
         .form-card input, .form-card select {
             width: calc(100% - 60px); 
             padding: 10px;
@@ -50,18 +55,22 @@
             border-radius: 5px;
             display: inline-block;
         }
+    
         .form-card .input-group {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+    
         .form-card .input-group input {
             width: 75%; 
         }
+    
         .form-card .input-group span {
             width: 20%; 
             text-align: center;
         }
+    
         .form-card button {
             width: 100%;
             padding: 10px;
@@ -71,10 +80,11 @@
             border: none;
             color: #ffffff;
         }
+    
         .form-card button:hover {
             background-color: #5751d9;
         }
-
+    
         .error {
             color: #fff;
             background-color: #d9534f;
@@ -84,38 +94,38 @@
             font-weight: bold;
             margin-top: 5px;
         }
-
+    
         .info-card p {
             font-size: 1.1rem;
         }
-
+    
         .form-group {
             display: flex;
             flex-direction: column;
             margin-bottom: 15px;
         }
-
+    
         .form-group label {
             font-weight: bold;
             margin-bottom: 5px;
         }
-
+    
         .form-group .input-wrapper {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
         }
-
+    
         .form-group .input-wrapper input {
             width: 80%;
         }
-
+    
         .form-group .input-wrapper span {
             width: 18%;
             text-align: center;
         }
-
+    
         .form-group .error {
             margin-top: 5px;
             font-size: 0.9rem;
@@ -125,10 +135,31 @@
             border-radius: 4px;
             width: 100%;
         }
-    </style>
+    
+        /* Fix for form scroll and prevent overflow */
+        .form-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333333;
+            overflow-y: auto; /* Enable scrolling for the form card */
+            max-height: 80vh; /* Limit form card height */
+        }
+    
+        .form-container {
+            max-height: 60vh; /* Restrict form content height */
+            overflow-y: auto; /* Adds scrolling for form content */
+        }
+    
+        .form-group input, .form-group select {
+            width: 100%;
+        }
+    </style>    
 </head>
 <body>
-
     <div class="container">
         <div class="info-card">
             <h1>Welcome to CalorieConnect</h1>
@@ -139,73 +170,75 @@
 
         <div class="form-card">
             <h1>Create a New Profile</h1>
-            <form method="POST" action="/create" data-th-object="${profile}">
-                <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" name="username" id="username" data-th-field="*{username}" required>
-                    <span 
-                        data-th-if="${#fields.hasErrors('username')}" 
-                        data-th-errors="*{username}" 
-                        data-th-errorclass="error"></span>
-                    <div th:if="${errorMessage}" class="error">
-                        <p th:text="${errorMessage}"></p>
+            <div class="form-container">
+                <form method="POST" action="/create" data-th-object="${profile}" id="form">
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" name="username" id="username" data-th-field="*{username}" required>
+                        <span 
+                            data-th-if="${#fields.hasErrors('username')}" 
+                            data-th-errors="*{username}" 
+                            data-th-errorclass="error"></span>
+                        <div th:if="${errorMessage}" class="error">
+                            <p th:text="${errorMessage}"></p>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" name="password" id="password" data-th-field="*{password}" required>
-                    <span 
-                        data-th-if="${#fields.hasErrors('password')}" 
-                        data-th-errors="*{password}" 
-                        data-th-errorclass="error"></span>
-                </div>
-                <div class="form-group">
-                    <label for="gender">Gender:</label>
-                    <select name="gender" id="gender" data-th-field="*{gender}" required>
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
-                    <span 
-                        data-th-if="${#fields.hasErrors('gender')}" 
-                        data-th-errors="*{gender}" 
-                        data-th-errorclass="error"></span>
-                </div>
-                <div class="form-group">
-                    <label for="age">Age:</label>
-                    <input type="number" name="age" id="age" data-th-field="*{age}" required>
-                    <span 
-                        data-th-if="${#fields.hasErrors('age')}" 
-                        data-th-errors="*{age}" 
-                        data-th-errorclass="error"></span>
-                </div>
-                <div class="form-group">
-                    <label for="height">Height:</label>
-                    <div class="input-wrapper">
-                        <input type="number" name="height" id="height" data-th-field="*{height}" required>
-                        <span>cm</span>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" id="password" data-th-field="*{password}" required>
+                        <span 
+                            data-th-if="${#fields.hasErrors('password')}" 
+                            data-th-errors="*{password}" 
+                            data-th-errorclass="error"></span>
                     </div>
-                    <span 
-                        data-th-if="${#fields.hasErrors('height')}" 
-                        data-th-errors="*{height}" 
-                        data-th-errorclass="error"></span>
-                </div>
-                <div class="form-group">
-                    <label for="weight">Weight:</label>
-                    <div class="input-wrapper">
-                        <input type="number" name="weight" id="weight" data-th-field="*{weight}" required>
-                        <span>kg</span>
+                    <div class="form-group">
+                        <label for="gender">Gender:</label>
+                        <select name="gender" id="gender" data-th-field="*{gender}" required>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                        <span 
+                            data-th-if="${#fields.hasErrors('gender')}" 
+                            data-th-errors="*{gender}" 
+                            data-th-errorclass="error"></span>
                     </div>
-                    <span 
-                        data-th-if="${#fields.hasErrors('weight')}" 
-                        data-th-errors="*{weight}" 
-                        data-th-errorclass="error"></span>
-                </div>
-                <div>
-                    <button type="submit">Create Account</button>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <label for="age">Age:</label>
+                        <input type="number" name="age" id="age" data-th-field="*{age}" required>
+                        <span 
+                            data-th-if="${#fields.hasErrors('age')}" 
+                            data-th-errors="*{age}" 
+                            data-th-errorclass="error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Height:</label>
+                        <div class="input-wrapper">
+                            <input type="number" name="height" id="height" data-th-field="*{height}" required>
+                            <span>cm</span>
+                        </div>
+                        <span 
+                            data-th-if="${#fields.hasErrors('height')}" 
+                            data-th-errors="*{height}" 
+                            data-th-errorclass="error"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">Weight:</label>
+                        <div class="input-wrapper">
+                            <input type="number" name="weight" id="weight" data-th-field="*{weight}" required>
+                            <span>kg</span>
+                        </div>
+                        <span 
+                            data-th-if="${#fields.hasErrors('weight')}" 
+                            data-th-errors="*{weight}" 
+                            data-th-errorclass="error"></span>
+                    </div>
+                </form>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button type="submit" form="form">Create Account</button>
+            </div>
         </div>
     </div>
-
 </body>
+
 </html>
