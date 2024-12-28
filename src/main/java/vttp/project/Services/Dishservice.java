@@ -1,7 +1,10 @@
 package vttp.project.Services;
 
 import java.io.StringReader;
-
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -12,10 +15,12 @@ import org.springframework.web.client.RestTemplate;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
+import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonNumber;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import jakarta.json.JsonValue;
+import vttp.project.Models.Ingredients;
 import vttp.project.Models.dish;
 import vttp.project.Repositries.Dishrepositry;
 
@@ -26,6 +31,8 @@ public class Dishservice {
 
     @Autowired
     private Dishrepositry dishrepo;
+
+    //Retrieving Dish information
 
     public String getDishinstruction(String dishName) {
 
@@ -46,6 +53,8 @@ public class Dishservice {
 
         return dishrepo.getCaloriefromRepo(dishName);
     }
+
+    //Calling api to get individual calories for each ingredient
 
     public Integer getCalorieCount(String name, int quantity, String unit) {
 
@@ -82,7 +91,8 @@ public class Dishservice {
         return calorie;
     }
 
-    
+
+    //Storing, checking existence of, deleting dish information
 
     public void storeDishInstruction(String dishname, String instruction) {
 
@@ -112,6 +122,44 @@ public class Dishservice {
     public boolean checkNameExists(String dishname) {
 
         return dishrepo.checkNameExistinRepo(dishname);
+    }
+
+
+    //Services for Rest Controllers
+
+    public List<String> getDishesUnderCalories(int calorie) {
+        Map<String, Integer> allDishes = dishrepo.getAllDishandCalories();
+        return allDishes.entrySet().stream()
+                .filter(entry -> entry.getValue() < calorie)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+    }
+
+    public String getDishRecipe(String dishName) {
+
+        String instructions = dishrepo.retrieveDishinstruction(dishName);
+        dish dishInfo = dishrepo.retrieveDishingredients(dishName);
+
+        if (instructions == null) {
+            return null;
+        }
+
+        JsonArrayBuilder ingredientJson = Json.createArrayBuilder();
+        for (Ingredients ingredient : dishInfo.getContents()) {
+            ingredientJson.add(Json.createObjectBuilder()
+                    .add("name", ingredient.getName())
+                    .add("quantity", ingredient.getQuantity())
+                    .add("calorie", ingredient.getCalorie()));
+        }
+
+        JsonObject dishRecipeJson = Json.createObjectBuilder()
+                .add("Instructions", instructions)
+                .add("Ingredient list", ingredientJson.build())
+                .build();
+
+
+        return dishRecipeJson.toString();
+
     }
 
 

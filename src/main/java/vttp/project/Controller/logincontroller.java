@@ -27,6 +27,8 @@ public class logincontroller {
     @Autowired
     private Loginservice loginsvc;
 
+    //Login page Controller
+
     @GetMapping("/loginpage")
     public String getloginpage(Model model) {
 
@@ -56,6 +58,8 @@ public class logincontroller {
         }
     }
 
+    //Create new account page Controller
+
     @GetMapping("/createpage")
     public String getCreatepage(Model model) {
         model.addAttribute("profile", new Profile());
@@ -83,9 +87,7 @@ public class logincontroller {
         return"redirect:/loginmainpage";
     }
 
-
-
-
+    //General display main page controller
 
     @GetMapping("/loginmainpage")
     public String displayMainpage(@RequestParam(value = "meals", defaultValue = "3") int meals, Model model, HttpSession session) {
@@ -111,6 +113,8 @@ public class logincontroller {
 
         return"mainpage";
     }
+
+    //edit profile page controller
 
     @GetMapping("/editprofile")
     public String showEditProfilePage(Model model, HttpSession session) {
@@ -181,6 +185,8 @@ public class logincontroller {
 
         return"saved";
     }
+
+    //Logout Controller
 
     @PostMapping("/logout")
     public String userLogout(HttpSession session) {

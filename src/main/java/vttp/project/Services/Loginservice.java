@@ -27,6 +27,8 @@ public class Loginservice {
 
     public static final String API_URL = "https://nutrition-calculator.p.rapidapi.com/api/nutrition-info?";
 
+    //Used in both creating new account and login
+
     public boolean hasUsername(String username) {
 
         if(loginrepo.hasUserinRepo(username)){
@@ -36,31 +38,19 @@ public class Loginservice {
         }
     }
 
+    //Used in Login verification
+
     public String getPassword(String username) {
 
         return loginrepo.getPasswordfromRepo(username);
 
     }
 
-    public Integer getCalories(String username){
+    //Used when creating new account
 
-        String details = loginrepo.getUserDetails(username);
+    public void storeLoginDetails(String username, String password) {
 
-        JsonReader reader = Json.createReader(new StringReader(details));
-        JsonObject result = reader.readObject();
-        int totalcalorie = Integer.parseInt(result.getString("calorie"));
-
-        int caloriePerMeal = totalcalorie-500;
-        
-        
-        return caloriePerMeal;
-
-
-    }
-
-
-    public Map<String, Integer> getDishandCalories() {
-        return loginrepo.getdishList();
+        loginrepo.storeLogininRepo(username,password);
     }
 
     public void storeUserDetails(String username, String gender, Integer age,
@@ -109,11 +99,27 @@ public class Loginservice {
 
     }
 
-    public void storeLoginDetails(String username, String password) {
+    //Used in generating Main page controller
 
-        loginrepo.storeLogininRepo(username,password);
+    public Map<String, Integer> getDishandCalories() {
+        return loginrepo.getdishList();
     }
 
+    public Integer getCalories(String username){
+
+        String details = loginrepo.getUserDetails(username);
+
+        JsonReader reader = Json.createReader(new StringReader(details));
+        JsonObject result = reader.readObject();
+        int totalcalorie = Integer.parseInt(result.getString("calorie"));
+
+        int caloriePerMeal = totalcalorie-500;
+        
+        
+        return caloriePerMeal;
+    }
+
+    //Used in edit profile page
 
     public edit getHeightWeightAge(String username){
 
@@ -179,6 +185,8 @@ public class Loginservice {
 
         loginrepo.storeUserinRepo(username, updatedDetails);
     }
+
+    //Service for Rest Controller
 
     public List<String> getUserdishesfromRepo(String username) {
 

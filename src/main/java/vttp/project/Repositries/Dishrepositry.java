@@ -1,6 +1,7 @@
 package vttp.project.Repositries;
 
-import java.util.List;
+
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,6 +19,9 @@ public class Dishrepositry {
     public String retrieveDishinstruction(String dishName) {
 
         Object instruction = redisTemplate.opsForHash().get("instruction",dishName);
+        if (instruction == null) {
+            return null;
+        }
         return instruction.toString();
     }
 
@@ -65,6 +69,10 @@ public class Dishrepositry {
 
     public boolean checkNameExistinRepo(String dishName) {
         return redisTemplate.opsForHash().hasKey("instruction", dishName);
+    }
+
+    public Map<String, Integer> getAllDishandCalories() {
+        return redisTemplate.<String, Integer>opsForHash().entries("calorie");
     }
 
 }

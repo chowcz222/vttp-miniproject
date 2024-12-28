@@ -1,7 +1,6 @@
 package vttp.project.Controller;
 
 import java.util.Iterator;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,10 +20,12 @@ import vttp.project.Models.dish;
 import vttp.project.Services.Dishservice;
 
 @Controller
-public class DishesControler {
+public class DishesController {
 
     @Autowired
     private Dishservice dishsvc;
+
+    //Display dishinfo from mainpage Controller
 
     @GetMapping("/dishes/{name}")
     public String getDishPage(@PathVariable String name, Model model) throws JsonMappingException, JsonProcessingException {
@@ -41,6 +42,8 @@ public class DishesControler {
 
         return "dish-info";
     }
+
+    //Dish Creation page controller
 
     @GetMapping("/dishcreationpage")
     public String displaycreatedish(HttpSession session, Model model) {
@@ -103,6 +106,42 @@ public class DishesControler {
 
     }
 
+    @PostMapping("/deleteIngredient")
+    public String deleteIngredient( @RequestParam("ingredientName") String ingredientName,
+    @RequestParam("ingredientQuantity") int ingredientQuantity,
+    @RequestParam("ingredientUnit") String ingredientUnit, HttpSession session, Model model) {
+        dish dishInfo = (dish) session.getAttribute("newDish");
+
+        if (dishInfo != null) {
+            int removedCalorie = 0;
+            boolean itemRemoved = false;
+        
+            Iterator<Ingredients> iterator = dishInfo.getContents().iterator();
+            while (iterator.hasNext()) {
+                Ingredients ingredient = iterator.next();
+                if (!itemRemoved && ingredient.getName().equals(ingredientName) &&
+                    ingredient.getQuantity() == ingredientQuantity &&
+                    ingredient.getUnit().equals(ingredientUnit)) {
+                    
+                    iterator.remove();
+                    removedCalorie += ingredient.getCalorie();
+                    itemRemoved = true;
+                }
+            }
+        
+            if (itemRemoved) {
+                int totalCalorie = (int) session.getAttribute("dishcalorie");
+                int newCalorie = totalCalorie - removedCalorie;
+        
+                session.setAttribute("newDish", dishInfo);
+                session.setAttribute("dishcalorie", newCalorie);
+            }
+        }
+        
+
+        return "redirect:/dishcreationpage";
+    }
+
     @PostMapping("/postdish")
     public String saveDish(@RequestParam("dishname") String dishName, 
                             @RequestParam("instruction") String instruction,Model model, HttpSession session) {
@@ -152,41 +191,8 @@ public class DishesControler {
         return"posted";
     }
 
-    @PostMapping("/deleteIngredient")
-    public String deleteIngredient( @RequestParam("ingredientName") String ingredientName,
-    @RequestParam("ingredientQuantity") int ingredientQuantity,
-    @RequestParam("ingredientUnit") String ingredientUnit, HttpSession session, Model model) {
-        dish dishInfo = (dish) session.getAttribute("newDish");
 
-        if (dishInfo != null) {
-            int removedCalorie = 0;
-            boolean itemRemoved = false;
-        
-            Iterator<Ingredients> iterator = dishInfo.getContents().iterator();
-            while (iterator.hasNext()) {
-                Ingredients ingredient = iterator.next();
-                if (!itemRemoved && ingredient.getName().equals(ingredientName) &&
-                    ingredient.getQuantity() == ingredientQuantity &&
-                    ingredient.getUnit().equals(ingredientUnit)) {
-                    
-                    iterator.remove();
-                    removedCalorie += ingredient.getCalorie();
-                    itemRemoved = true;
-                }
-            }
-        
-            if (itemRemoved) {
-                int totalCalorie = (int) session.getAttribute("dishcalorie");
-                int newCalorie = totalCalorie - removedCalorie;
-        
-                session.setAttribute("newDish", dishInfo);
-                session.setAttribute("dishcalorie", newCalorie);
-            }
-        }
-        
-
-        return "redirect:/dishcreationpage";
-    }
+    //Editing and deleteing dishes from edit profile page controllers
 
     @PostMapping("/deleteDish")
     public String deleteDish(@RequestParam("dishName") String dishName, HttpSession session) {
