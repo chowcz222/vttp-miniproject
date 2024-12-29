@@ -176,6 +176,19 @@ public class DishesController {
         }
 
         dish dishInfo = (dish)session.getAttribute("newDish");
+        if(dishInfo == null) {
+
+            model.addAttribute("instruction", instruction);
+            model.addAttribute("dishname", dishName);
+            model.addAttribute("Ingredients", new Ingredients());
+            model.addAttribute("dishinfo", new dish());
+
+            model.addAttribute("errorMessage2", "Please add at least 1 ingredient");
+
+            return "createdish";
+
+        }
+        
         Integer calorie = (Integer)session.getAttribute("dishcalorie");
 
         session.setAttribute("newDish", new dish());
