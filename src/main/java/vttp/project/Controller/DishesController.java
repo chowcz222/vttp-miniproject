@@ -48,21 +48,11 @@ public class DishesController {
     @GetMapping("/dishcreationpage")
     public String displaycreatedish(HttpSession session, Model model) {
 
-        dish dishInfo = (dish)session.getAttribute("newDish");
+        session.setAttribute("newDish", new dish());
+        model.addAttribute("dishinfo", new dish());
 
-        if (dishInfo == null) {
-            model.addAttribute("dishinfo", new dish());
-        } else {
-            model.addAttribute("dishinfo", dishInfo);
-        }
-        Integer totalcalorie = (Integer)session.getAttribute("dishcalorie");
-
-        if (totalcalorie == null || totalcalorie == 0) {
-            model.addAttribute("dishcalorie", 0);
-        } else {
-            model.addAttribute("dishcalorie", totalcalorie);
-        }
-            model.addAttribute("Ingredients", new Ingredients());
+        session.setAttribute("dishcalorie", 0);
+        model.addAttribute("dishcalorie", 0);
 
         return "createdish";
     }
@@ -193,7 +183,7 @@ public class DishesController {
             model.addAttribute("dishname", dishName);
             model.addAttribute("Ingredients", new Ingredients());
             model.addAttribute("dishinfo", new dish());
-            Integer totalcalorie = (Integer)session.getAttribute("dishcalorie2");
+            Integer totalcalorie = (Integer)session.getAttribute("dishcalorie");
             model.addAttribute("dishcalorie", totalcalorie);
 
             model.addAttribute("errorMessage2", "Please add at least 1 ingredient");
@@ -339,37 +329,7 @@ public class DishesController {
     public String saveEdit(@RequestParam("dishname") String dishName, 
                             @RequestParam("instruction") String instruction,Model model, HttpSession session) {
 
-        dishsvc.deleteDish((String)session.getAttribute("dishName2"), (String)session.getAttribute("username"));
-
-        Boolean boolean1 = dishsvc.checkNameExists(dishName);
-
-        if(boolean1) {
-
-            model.addAttribute("instruction", instruction);
-            model.addAttribute("dishname", dishName);
-
-            dish dishInfo = (dish)session.getAttribute("newDish2");
-
-            if (dishInfo == null) {
-                model.addAttribute("dishinfo", new dish());
-            } else {
-                model.addAttribute("dishinfo", dishInfo);
-            }
-            Integer totalcalorie = (Integer)session.getAttribute("dishcalorie2");
-
-            if (totalcalorie == null || totalcalorie == 0) {
-                model.addAttribute("dishcalorie", 0);
-            } else {
-                model.addAttribute("dishcalorie", totalcalorie);
-            }
-                model.addAttribute("Ingredients", new Ingredients());
-
-            model.addAttribute("errorMessage1", "Dish Name Taken");
-
-            return "editdish";
-
-        }
-
+        
         dish dishInfo = (dish)session.getAttribute("newDish2");
         if(dishInfo == null) {
 
@@ -398,6 +358,38 @@ public class DishesController {
             return "editdish";
 
         }
+        
+        dishsvc.deleteDish((String)session.getAttribute("dishName2"), (String)session.getAttribute("username"));
+
+        Boolean boolean1 = dishsvc.checkNameExists(dishName);
+
+        if(boolean1) {
+
+            model.addAttribute("instruction", instruction);
+            model.addAttribute("dishname", dishName);
+
+            dishInfo = (dish)session.getAttribute("newDish2");
+
+            if (dishInfo == null) {
+                model.addAttribute("dishinfo", new dish());
+            } else {
+                model.addAttribute("dishinfo", dishInfo);
+            }
+            Integer totalcalorie = (Integer)session.getAttribute("dishcalorie2");
+
+            if (totalcalorie == null || totalcalorie == 0) {
+                model.addAttribute("dishcalorie", 0);
+            } else {
+                model.addAttribute("dishcalorie", totalcalorie);
+            }
+                model.addAttribute("Ingredients", new Ingredients());
+
+            model.addAttribute("errorMessage1", "Dish Name Taken");
+
+            return "editdish";
+
+        }
+
 
         Integer calorie = (Integer)session.getAttribute("dishcalorie2");
 

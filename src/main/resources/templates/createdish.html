@@ -113,11 +113,11 @@
     <div class="container">
         <div class="content-box">
             <h1>Ingredients List</h1>
-            <div th:if="${#lists.isEmpty(dishinfo.contents)}">
+            <div th:if="${dishinfo == null || #lists.isEmpty(dishinfo.contents)}">
                 <h3>No Ingredients added yet</h3>
             </div>
 
-            <div data-th-unless="${#lists.isEmpty(dishinfo.contents)}">
+            <div data-th-unless="${dishinfo == null || #lists.isEmpty(dishinfo.contents)}">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
