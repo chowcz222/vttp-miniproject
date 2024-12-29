@@ -148,6 +148,9 @@
             <div th:if="${dishcalorie}" class="total-calories">
                 <p class="big-text">Total Calories: <code data-th-text="${dishcalorie}"></code></p>
             </div>
+            <div th:if="${errorMessage2 != null && !#strings.isEmpty(errorMessage2)}" class="error">
+                <p th:text="${errorMessage2}"></p>
+            </div>
         </div>
         <div class="content-box">
             <h1>Add Ingredient</h1>

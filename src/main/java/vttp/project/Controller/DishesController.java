@@ -187,6 +187,19 @@ public class DishesController {
 
             return "createdish";
 
+        } else if (dishInfo.getContents().isEmpty()) {
+
+            model.addAttribute("instruction", instruction);
+            model.addAttribute("dishname", dishName);
+            model.addAttribute("Ingredients", new Ingredients());
+            model.addAttribute("dishinfo", new dish());
+            Integer totalcalorie = (Integer)session.getAttribute("dishcalorie2");
+            model.addAttribute("dishcalorie", totalcalorie);
+
+            model.addAttribute("errorMessage2", "Please add at least 1 ingredient");
+
+            return "createdish";
+
         }
         
         Integer calorie = (Integer)session.getAttribute("dishcalorie");
@@ -358,6 +371,34 @@ public class DishesController {
         }
 
         dish dishInfo = (dish)session.getAttribute("newDish2");
+        if(dishInfo == null) {
+
+            model.addAttribute("instruction", instruction);
+            model.addAttribute("dishname", dishName);
+            model.addAttribute("Ingredients", new Ingredients());
+            model.addAttribute("dishinfo", new dish());
+            Integer totalcalorie = (Integer)session.getAttribute("dishcalorie2");
+            model.addAttribute("dishcalorie", totalcalorie);
+
+            model.addAttribute("errorMessage2", "Please add at least 1 ingredient");
+
+            return "editdish";
+
+        } else if (dishInfo.getContents().isEmpty()) {
+
+            model.addAttribute("instruction", instruction);
+            model.addAttribute("dishname", dishName);
+            model.addAttribute("Ingredients", new Ingredients());
+            model.addAttribute("dishinfo", new dish());
+            Integer totalcalorie = (Integer)session.getAttribute("dishcalorie2");
+            model.addAttribute("dishcalorie", totalcalorie);
+
+            model.addAttribute("errorMessage2", "Please add at least 1 ingredient");
+
+            return "editdish";
+
+        }
+
         Integer calorie = (Integer)session.getAttribute("dishcalorie2");
 
         session.setAttribute("newDish2", new dish());
