@@ -359,35 +359,38 @@ public class DishesController {
 
         }
         
-        dishsvc.deleteDish((String)session.getAttribute("dishName2"), (String)session.getAttribute("username"));
 
-        Boolean boolean1 = dishsvc.checkNameExists(dishName);
+        if(!dishName.equals((String)session.getAttribute("dishName2"))) {
+            Boolean boolean1 = dishsvc.checkNameExists(dishName);
 
-        if(boolean1) {
+            if(boolean1) {
 
-            model.addAttribute("instruction", instruction);
-            model.addAttribute("dishname", dishName);
+                model.addAttribute("instruction", instruction);
+                model.addAttribute("dishname", dishName);
 
-            dishInfo = (dish)session.getAttribute("newDish2");
+                dishInfo = (dish)session.getAttribute("newDish2");
 
-            if (dishInfo == null) {
-                model.addAttribute("dishinfo", new dish());
-            } else {
-                model.addAttribute("dishinfo", dishInfo);
+                if (dishInfo == null) {
+                    model.addAttribute("dishinfo", new dish());
+                } else {
+                    model.addAttribute("dishinfo", dishInfo);
+                }
+                Integer totalcalorie = (Integer)session.getAttribute("dishcalorie2");
+
+                if (totalcalorie == null || totalcalorie == 0) {
+                    model.addAttribute("dishcalorie", 0);
+                } else {
+                    model.addAttribute("dishcalorie", totalcalorie);
+                }
+                    model.addAttribute("Ingredients", new Ingredients());
+
+                model.addAttribute("errorMessage1", "Dish Name Taken");
+
+                return "editdish";
+
             }
-            Integer totalcalorie = (Integer)session.getAttribute("dishcalorie2");
-
-            if (totalcalorie == null || totalcalorie == 0) {
-                model.addAttribute("dishcalorie", 0);
-            } else {
-                model.addAttribute("dishcalorie", totalcalorie);
-            }
-                model.addAttribute("Ingredients", new Ingredients());
-
-            model.addAttribute("errorMessage1", "Dish Name Taken");
-
-            return "editdish";
-
+        } else {
+            dishsvc.deleteDish((String)session.getAttribute("dishName2"), (String)session.getAttribute("username"));
         }
 
 
