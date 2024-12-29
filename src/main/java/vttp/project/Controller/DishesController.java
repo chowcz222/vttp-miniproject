@@ -78,6 +78,7 @@ public class DishesController {
         if(calorie == 0) {
             model.addAttribute("errorMessage", "Ingredient not recognized");
             model.addAttribute("dishinfo", dishInfo);
+            model.addAttribute("dishcalorie", totalcalorie);
             return "createdish";
         } else {
             model.addAttribute("errorMessage", "");
@@ -390,11 +391,12 @@ public class DishesController {
                 model.addAttribute("errorMessage1", "Dish Name Taken");
 
                 return "editdish";
-
             }
-        } else {
-            dishsvc.deleteDish((String)session.getAttribute("dishName2"), (String)session.getAttribute("username"));
-        }
+            
+        } 
+        
+        dishsvc.deleteDish((String)session.getAttribute("dishName2"), (String)session.getAttribute("username"));
+        
 
 
         Integer calorie = (Integer)session.getAttribute("dishcalorie2");
