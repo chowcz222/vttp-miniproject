@@ -125,11 +125,14 @@ public class DishesController {
         
                 session.setAttribute("newDish", dishInfo);
                 session.setAttribute("dishcalorie", newCalorie);
+                model.addAttribute("dishcalorie", newCalorie);
             }
+            model.addAttribute("dishinfo", dishInfo);
+
         }
         
 
-        return "redirect:/dishcreationpage";
+        return "createdish";
     }
 
     @PostMapping("/postdish")
